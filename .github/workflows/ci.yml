@@ -71,7 +71,7 @@ jobs:
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository-url: https://github.com/enricorotundo/pytest-discord/
+          repository-url: https://test.pypi.org/legacy/
           skip-existing: true
           verbose: true
 
