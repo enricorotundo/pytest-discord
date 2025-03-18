@@ -166,46 +166,46 @@ def _extract_longrepr_embeds(
     total_embed_len = embed_len
     exceeds_embeds_limit = False
 
-    for stat_key, values in reporter.stats.items():
-        if not stat_key or stat_key not in ["failed", "error"]:
-            continue
+    # for stat_key, values in reporter.stats.items():
+    #     if not stat_key or stat_key not in ["failed", "error"]:
+    #         continue
 
-        for i, value in enumerate(values):
-            try:
-                if not value.longrepr:
-                    continue
-            except AttributeError:
-                continue
+    #     for i, value in enumerate(values):
+    #         try:
+    #             if not value.longrepr:
+    #                 continue
+    #         except AttributeError:
+    #             continue
 
-            lines_len = 0
-            lines: List[str] = []
-            for line in reversed(str(value.longrepr).splitlines()):
-                if (lines_len + len(line)) > (MAX_EMBED_LEN - 64):
-                    break
+    #         lines_len = 0
+    #         lines: List[str] = []
+    #         for line in reversed(str(value.longrepr).splitlines()):
+    #             if (lines_len + len(line)) > (MAX_EMBED_LEN - 64):
+    #                 break
 
-                lines.insert(0, line)
-                lines_len += len(line) + 1
+    #             lines.insert(0, line)
+    #             lines_len += len(line) + 1
 
-            embed = Embed(
-                description="# {}: #{}\n{}".format(
-                    stat_key, i + 1, _decorate_code_block(lang="py", text="\n".join(lines))
-                ),
-                colour=colour,
-            )
+    #         embed = Embed(
+    #             description="# {}: #{}\n{}".format(
+    #                 stat_key, i + 1, _decorate_code_block(lang="py", text="\n".join(lines))
+    #             ),
+    #             colour=colour,
+    #         )
 
-            assert embed.description is not None
-            if (total_embed_len + len(embed.description)) > (MAX_EMBEDS_LEN - 128):
-                embeds.append(
-                    Embed(description=f"and other {len(values) - i} failed", colour=colour)
-                )
-                exceeds_embeds_limit = True
-                break
+    #         assert embed.description is not None
+    #         if (total_embed_len + len(embed.description)) > (MAX_EMBEDS_LEN - 128):
+    #             embeds.append(
+    #                 Embed(description=f"and other {len(values) - i} failed", colour=colour)
+    #             )
+    #             exceeds_embeds_limit = True
+    #             break
 
-            total_embed_len += len(embed.description)
-            embeds.append(embed)
+    #         total_embed_len += len(embed.description)
+    #         embeds.append(embed)
 
-            if len(embeds) >= MAX_EMBED_CT:
-                break
+    #         if len(embeds) >= MAX_EMBED_CT:
+    #             break
 
     return embeds, exceeds_embeds_limit
 
@@ -362,35 +362,35 @@ def pytest_unconfigure(config: Config) -> None:
     assert embed_summary.footer.text is not None
     embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer.text)
 
-    if verbosity_level >= 1:
-        pytest_stats = extract_pytest_stats(
-            reporter=reporter,
-            outcomes=["passed", "failed", "error", "skipped", "xfailed", "xpassed"],
-            verbosity_level=max(0, verbosity_level - 1),
-        )
-        result_lines_map = defaultdict(list)
+    # if verbosity_level >= 1:
+    #     pytest_stats = extract_pytest_stats(
+    #         reporter=reporter,
+    #         outcomes=["passed", "failed", "error", "skipped", "xfailed", "xpassed"],
+    #         verbosity_level=max(0, verbosity_level - 1),
+    #     )
+    #     result_lines_map = defaultdict(list)
 
-        for key, stats in pytest_stats.items():
-            result_lines_map[extract_result_type(stats)].append(
-                "`{}`: {}".format(
-                    ":".join(key),
-                    ", ".join([f"`{ct}` {outcome}" for outcome, ct in stats.items() if ct > 0]),
-                )
-            )
+    #     for key, stats in pytest_stats.items():
+    #         result_lines_map[extract_result_type(stats)].append(
+    #             "`{}`: {}".format(
+    #                 ":".join(key),
+    #                 ", ".join([f"`{ct}` {outcome}" for outcome, ct in stats.items() if ct > 0]),
+    #             )
+    #         )
 
-        for result_type, result_lines in result_lines_map.items():
-            embed = Embed(
-                description="\n".join(result_lines)[:MAX_EMBED_LEN],
-                colour=_result_type_to_colour[result_type],
-            )
-            embeds.append(embed)
-            assert embed.description is not None
-            embeds_len_ct += len(embed.description)
+    #     for result_type, result_lines in result_lines_map.items():
+    #         embed = Embed(
+    #             description="\n".join(result_lines)[:MAX_EMBED_LEN],
+    #             colour=_result_type_to_colour[result_type],
+    #         )
+    #         embeds.append(embed)
+    #         assert embed.description is not None
+    #         embeds_len_ct += len(embed.description)
 
-        _embeds, exceeds_embeds_limit = _extract_longrepr_embeds(
-            reporter, embeds_len_ct, colour=colour
-        )
-        embeds.extend(_embeds)
+    #     _embeds, exceeds_embeds_limit = _extract_longrepr_embeds(
+    #         reporter, embeds_len_ct, colour=colour
+    #     )
+    #     embeds.extend(_embeds)
 
     header = _make_header(sum(stat_count_map.values()))
     attach_file = None
@@ -415,6 +415,7 @@ def pytest_unconfigure(config: Config) -> None:
             username=opt_retriever.retrieve_username(),
             avatar_url=avatar_url,
             embeds=embeds,
+            # embeds=[],
             attach_file=attach_file,
         )
     )
