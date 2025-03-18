@@ -57,7 +57,7 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 20
     environment:
-      name: enricorotundo
+      name: testpypi
       url: https://pypi.org/p/pytest-discord-fork
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
