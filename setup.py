@@ -24,8 +24,8 @@ def get_release_command_class() -> Dict[str, Type[setuptools.Command]]:
 with open(os.path.join(MODULE_NAME.replace("-", "_"), "__version__.py")) as f:
     exec(f.read(), pkg_info)
 
-with open("README.rst", encoding=ENCODING) as f:
-    LONG_DESCRIPTION = f.read()
+# with open("README.rst", encoding=ENCODING) as f:
+#     LONG_DESCRIPTION = f.read()
 
 with open(os.path.join(REQUIREMENT_DIR, "requirements.txt")) as f:
     INSTALL_REQUIRES = [line.strip() for line in f if line.strip()]
@@ -43,8 +43,8 @@ setuptools.setup(
     include_package_data=True,
     keywords=["discord", "plugin", "pytest"],
     license=pkg_info["__license__"],
-    long_description=LONG_DESCRIPTION,
-    long_description_content_type="text/x-rst",
+    # long_description=LONG_DESCRIPTION,
+    # long_description_content_type="text/x-rst",
     packages=setuptools.find_packages(exclude=["test*"]),
     package_data={MODULE_NAME: ["py.typed"]},
     project_urls={
