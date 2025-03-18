@@ -24,7 +24,7 @@ from ._opt_retriever import DiscordOptRetriever
 
 MAX_EMBED_LEN = 2048
 MAX_EMBEDS_LEN = 6000
-MAX_EMBED_CT = 10
+MAX_EMBED_CT = 0
 
 
 def pytest_addoption(parser: Parser) -> None:
